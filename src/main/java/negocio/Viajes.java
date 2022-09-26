@@ -47,14 +47,8 @@ public class Viajes {
     }
 
     public void likeViaje(int id, boolean isGuardado){
-        byte boolEnBit;
-        if(isGuardado){
-            boolEnBit = 0;
-        }else{
-            boolEnBit = 1;
-        }
-        String sql = "UPDATE `tbviajes` SET `is_guardado_viaje` = '" + boolEnBit
-                +"' WHERE `tbviajes`.`id_viaje` = "+id+";";
+        String sql = "UPDATE `tbviajes` SET `is_guardado_viaje` = " + !isGuardado
+                +" WHERE `tbviajes`.`id_viaje` = "+id+";";
         conexionViaje.actualizar(sql, conexionUrl);
     }
 
