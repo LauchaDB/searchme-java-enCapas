@@ -21,6 +21,16 @@ public class Viaje {
     public Viaje() {
     }
 
+    public Viaje(long idViaje, String nombreViaje, String descripViaje, Date fechaViaje, double valorTotalViaje, boolean isGuardadoViaje, int idUs) {
+        this.idViaje = idViaje;
+        this.nombreViaje = nombreViaje;
+        this.descripViaje = descripViaje;
+        this.fechaViaje = fechaViaje;
+        this.valorTotalViaje = valorTotalViaje;
+        this.isGuardadoViaje = isGuardadoViaje;
+        this.idUs = idUs;
+    }
+
     public Date getFechaViaje() {
         return fechaViaje;
     }

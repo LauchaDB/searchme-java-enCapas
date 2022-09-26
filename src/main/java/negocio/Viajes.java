@@ -47,20 +47,16 @@ public class Viajes {
     }
 
     public void likeViaje(int id, boolean isGuardado){
-        int boolEnTinyInt;
+        byte boolEnBit;
         if(isGuardado){
-            boolEnTinyInt = 0;
+            boolEnBit = 0;
         }else{
-            boolEnTinyInt = 1;
+            boolEnBit = 1;
         }
-        String sql = "UPDATE `tbviajes` SET `is_guardado_viaje` = '" + boolEnTinyInt
+        String sql = "UPDATE `tbviajes` SET `is_guardado_viaje` = '" + boolEnBit
                 +"' WHERE `tbviajes`.`id_viaje` = "+id+";";
         conexionViaje.actualizar(sql, conexionUrl);
     }
-
-    /*public List<Viaje> findAllViajes(){
-        return conexionViaje.listarViajes(conexionUrl);
-    }*/
 
     public List<Viaje> findAllViajes() throws SQLException {
         List<Viaje> listado = new ArrayList<>();
@@ -100,8 +96,6 @@ public class Viajes {
 
 
     public void deleteViaje(int id){
-        String sqlViajeGuardado = "DELETE FROM `tbviajes_guardados_usuarios` WHERE `tbviajes_guardados_usuarios`.`id_viaje` = " + id;
-        conexionViaje.eliminar(sqlViajeGuardado, conexionUrl);
         String sqlDestino = "DELETE FROM `tbdestinos` WHERE `tbdestinos`.`id_viaje` = " + id;
         conexionViaje.eliminar(sqlDestino, conexionUrl);
         String sqlViaje = "DELETE FROM `tbviajes` WHERE `tbviajes`.`id_viaje` = " + id;
