@@ -1,18 +1,14 @@
-package Negocio;
+package negocio;
 
-import Datos.Conexion;
-import Negocio.model.Viaje;
+import datos.Conexion;
+import negocio.model.Viaje;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Calendar;
 
 public class Viajes {
 

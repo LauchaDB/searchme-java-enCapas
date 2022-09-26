@@ -1,4 +1,4 @@
-package Negocio.model;
+package negocio.model;
 
 public class Usuario {
 

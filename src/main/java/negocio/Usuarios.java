@@ -1,7 +1,7 @@
-package Negocio;
+package negocio;
 
-import Datos.Conexion;
-import Negocio.model.Usuario;
+import datos.Conexion;
+import negocio.model.Usuario;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

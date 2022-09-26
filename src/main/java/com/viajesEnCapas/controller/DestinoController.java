@@ -1,7 +1,7 @@
 package com.viajesEnCapas.controller;
 
-import Negocio.Destinos;
-import Negocio.model.Destino;
+import negocio.Destinos;
+import negocio.model.Destino;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
