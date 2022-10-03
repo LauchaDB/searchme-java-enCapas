@@ -22,7 +22,7 @@ public class Viajes {
 
     Conexion conexionViaje = new Conexion();
 
-    public void saveViaje(Viaje viaje) throws ParseException {
+    public void saveViaje(Viaje viaje, String email_us) throws ParseException {
 
         String sql = "INSERT INTO `tbviajes` (`id_viaje`, `nombre_viaje`, `descrip_viaje`, `fecha_viaje`, `valor_total_viaje`, `is_guardado_viaje`,`id_us`) VALUES (NULL, '"
 
@@ -30,8 +30,7 @@ public class Viajes {
                 + viaje.getDescripViaje() + "', '"
                 + viaje.getFechaViaje().toInstant().atZone(ZoneId.of("Etc/GMT-3")).toLocalDate() + "', " //casteando la fecha que llega desde front con nuestra zona horaria, porque sql no toma el date de java
                 + viaje.getValorTotalViaje() + ", "
-                + 0 + ", "
-                + viaje.getIdUs() + ");";
+                + 0 + ", (SELECT id_us FROM tbusuarios WHERE email_us = '"+email_us+"'));";
 
         conexionViaje.agregar(sql, conexionUrl);
     }
@@ -88,11 +87,44 @@ public class Viajes {
         return listado;
     }
 
+    public List<Viaje> findAllViajesUsuario(String email_us) throws SQLException {
+        List<Viaje> listado = new ArrayList<>();
+        String sql = "SELECT * FROM tbviajes WHERE id_us = (SELECT id_us FROM tbusuarios WHERE email_us = '"+ email_us +"');";
+        ResultSet resultado = conexionViaje.listar(sql, conexionUrl);
+        while(resultado.next()) {
+            Viaje viaje = new Viaje();
+            viaje.setIdViaje(resultado.getInt("id_viaje"));
+            viaje.setNombreViaje(resultado.getString("nombre_viaje"));
+            viaje.setDescripViaje(resultado.getString("descrip_viaje"));
+            viaje.setFechaViaje(resultado.getDate("fecha_viaje"));
+            viaje.setValorTotalViaje(resultado.getDouble("valor_total_viaje"));
+            viaje.setIsGuardadoViaje(resultado.getBoolean("is_guardado_viaje"));
+            viaje.setIdUs(resultado.getInt("id_us"));
+            listado.add(viaje);
+        }
+        return listado;
+    }
+
 
     public void deleteViaje(int id){
         String sqlDestino = "DELETE FROM `tbdestinos` WHERE `tbdestinos`.`id_viaje` = " + id;
         conexionViaje.eliminar(sqlDestino, conexionUrl);
         String sqlViaje = "DELETE FROM `tbviajes` WHERE `tbviajes`.`id_viaje` = " + id;
         conexionViaje.eliminar(sqlViaje, conexionUrl);
+    }
+
+    public Viaje findAllViajeById(long idViaje) throws SQLException {
+        Viaje viaje = new Viaje();
+        String sql = "SELECT * FROM `tbviajes` WHERE `tbviajes`.`id_viaje` = "+ idViaje +";";
+        ResultSet resultado = conexionViaje.listar(sql, conexionUrl);
+        viaje.setIdViaje(resultado.getInt("id_viaje"));
+        viaje.setNombreViaje(resultado.getString("nombre_viaje"));
+        viaje.setDescripViaje(resultado.getString("descrip_viaje"));
+        viaje.setFechaViaje(resultado.getDate("fecha_viaje"));
+        viaje.setValorTotalViaje(resultado.getDouble("valor_total_viaje"));
+        viaje.setIsGuardadoViaje(resultado.getBoolean("is_guardado_viaje"));
+        viaje.setIdUs(resultado.getInt("id_us"));
+
+        return viaje;
     }
 }

@@ -26,13 +26,18 @@ public class ViajeController {
         return viajes.findAllViajesLike();
     }
 
+    @GetMapping("/viajesUsuario/{email_us}")
+    public List<Viaje> viajesUsuario(@PathVariable String email_us) throws SQLException {
+        return viajes.findAllViajesUsuario(email_us);
+    }
+
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/create")
-    public void create(@RequestBody Viaje viaje){
+    @PostMapping("/create/{email_us}")
+    public void create(@PathVariable String email_us ,@RequestBody Viaje viaje){
         System.out.println("nombre: " +viaje.getNombreViaje() + ", descrip: " + viaje.getDescripViaje() + ", fecha: " + viaje.getFechaViaje() + ", valor: " + viaje.getValorTotalViaje());
 
         try {
-            viajes.saveViaje(viaje);
+            viajes.saveViaje(viaje, email_us);
         } catch (ParseException e) {
             System.out.println(e);
         }

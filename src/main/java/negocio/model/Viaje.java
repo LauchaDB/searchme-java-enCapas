@@ -1,8 +1,13 @@
 package negocio.model;
 
+import negocio.Viajes;
+
+import java.sql.SQLException;
 import java.util.Date;
 
 public class Viaje {
+
+    Viajes viajes = new Viajes();
 
     private long idViaje;
 
@@ -21,14 +26,8 @@ public class Viaje {
     public Viaje() {
     }
 
-    public Viaje(long idViaje, String nombreViaje, String descripViaje, Date fechaViaje, double valorTotalViaje, boolean isGuardadoViaje, int idUs) {
-        this.idViaje = idViaje;
-        this.nombreViaje = nombreViaje;
-        this.descripViaje = descripViaje;
-        this.fechaViaje = fechaViaje;
-        this.valorTotalViaje = valorTotalViaje;
-        this.isGuardadoViaje = isGuardadoViaje;
-        this.idUs = idUs;
+    public Viaje(int idViaje) throws SQLException {
+        viajes.findAllViajeById(idViaje);
     }
 
     public Date getFechaViaje() {
