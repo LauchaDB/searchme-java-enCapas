@@ -50,6 +50,15 @@ public class Destinos {
         conexionDestino.agregar(sql, conexionUrl);
     }
 
+    public void saveDestinoParaElUltimoViaje(Destino destino){
+        String sql = "INSERT INTO `tbdestinos` (`id_dest`, `provincia_dest`, `ciudad_dest`, `descrip_dest`, `id_viaje`) VALUES (NULL, '"
+                + destino.getProvinciaDest() + "', '"
+                + destino.getCiudadDest() + "', '"
+                + destino.getDescripDest() + "', (SELECT MAX(id_viaje) FROM tbviajes));";
+
+        conexionDestino.agregar(sql, conexionUrl);
+    }
+
     public void deleteDestino(int id){
         String sql = "DELETE FROM `tbdestinos` WHERE `tbdestinos`.`id_dest` = " + id;
         conexionDestino.eliminar(sql, conexionUrl);
