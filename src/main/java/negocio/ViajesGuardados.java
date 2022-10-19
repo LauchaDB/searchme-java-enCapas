@@ -35,7 +35,7 @@ public class ViajesGuardados {
             viaje.setFechaViaje(resultado.getDate("fecha_viaje"));
             viaje.setValorTotalViaje(resultado.getDouble("valor_total_viaje"));
             viaje.setIsGuardadoViaje(resultado.getBoolean("is_guardado_viaje"));
-            viaje.setIdUs(resultado.getInt("id_us"));
+            viaje.setEmailUs(resultado.getString("email_us"));
             listado.add(viaje);
         }
         return listado;

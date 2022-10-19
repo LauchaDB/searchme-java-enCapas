@@ -1,6 +1,7 @@
 package negocio;
 
 import datos.Conexion;
+import negocio.model.Destino;
 import negocio.model.Viaje;
 
 import java.sql.ResultSet;
@@ -22,15 +23,15 @@ public class Viajes {
 
     Conexion conexionViaje = new Conexion();
 
-    public void saveViaje(Viaje viaje, String email_us) throws ParseException {
+    public void saveViaje(Viaje viaje) throws ParseException {
 
-        String sql = "INSERT INTO `tbviajes` (`id_viaje`, `nombre_viaje`, `descrip_viaje`, `fecha_viaje`, `valor_total_viaje`, `is_guardado_viaje`,`id_us`) VALUES (NULL, '"
+        String sql = "INSERT INTO `tbviajes` (`id_viaje`, `nombre_viaje`, `descrip_viaje`, `fecha_viaje`, `valor_total_viaje`, `is_guardado_viaje`,`email_us`) VALUES (NULL, '"
 
                 + viaje.getNombreViaje() + "', '"
                 + viaje.getDescripViaje() + "', '"
                 + viaje.getFechaViaje().toInstant().atZone(ZoneId.of("Etc/GMT-3")).toLocalDate() + "', " //casteando la fecha que llega desde front con nuestra zona horaria, porque sql no toma el date de java
                 + viaje.getValorTotalViaje() + ", "
-                + 0 + ", (SELECT id_us FROM tbusuarios WHERE email_us = '"+email_us+"'));";
+                + 0 + ",'"+viaje.getEmailUs()+"');";
 
         conexionViaje.agregar(sql, conexionUrl);
     }
@@ -40,7 +41,7 @@ public class Viajes {
                 + "', `descrip_viaje` = '" + viaje.getDescripViaje()
                 + "', `fecha_viaje` = '" + viaje.getFechaViaje().toInstant().atZone(ZoneId.of("Etc/GMT-3")).toLocalDate()
                 + "', `valor_total_viaje` = '" + viaje.getValorTotalViaje()
-                + "', `id_us` = '" + viaje.getIdUs()
+                + "', `id_us` = '" + viaje.getEmailUs()
                 +"' WHERE `tbviajes`.`id_viaje` = "+id+";";
         conexionViaje.actualizar(sql, conexionUrl);
     }
@@ -63,7 +64,7 @@ public class Viajes {
             viaje.setFechaViaje(resultado.getDate("fecha_viaje"));
             viaje.setValorTotalViaje(resultado.getDouble("valor_total_viaje"));
             viaje.setIsGuardadoViaje(resultado.getBoolean("is_guardado_viaje"));
-            viaje.setIdUs(resultado.getInt("id_us"));
+            viaje.setEmailUs(resultado.getString("email_us"));
             listado.add(viaje);
         }
         return listado;
@@ -75,13 +76,13 @@ public class Viajes {
         ResultSet resultado = conexionViaje.listar(sql, conexionUrl);
         while(resultado.next()) {
             Viaje viaje = new Viaje();
-            viaje.setIdViaje(resultado.getInt("id_viaje"));
+            viaje.setIdViaje(resultado.getLong("id_viaje"));
             viaje.setNombreViaje(resultado.getString("nombre_viaje"));
             viaje.setDescripViaje(resultado.getString("descrip_viaje"));
             viaje.setFechaViaje(resultado.getDate("fecha_viaje"));
             viaje.setValorTotalViaje(resultado.getDouble("valor_total_viaje"));
             viaje.setIsGuardadoViaje(resultado.getBoolean("is_guardado_viaje"));
-            viaje.setIdUs(resultado.getInt("id_us"));
+            viaje.setEmailUs(resultado.getString("email_us"));
             listado.add(viaje);
         }
         return listado;
@@ -89,17 +90,17 @@ public class Viajes {
 
     public List<Viaje> findAllViajesUsuario(String email_us) throws SQLException {
         List<Viaje> listado = new ArrayList<>();
-        String sql = "SELECT * FROM tbviajes WHERE id_us = (SELECT id_us FROM tbusuarios WHERE email_us = '"+ email_us +"');";
+        String sql = "SELECT * FROM tbviajes WHERE email_us = '"+ email_us +"';";
         ResultSet resultado = conexionViaje.listar(sql, conexionUrl);
         while(resultado.next()) {
             Viaje viaje = new Viaje();
-            viaje.setIdViaje(resultado.getInt("id_viaje"));
+            viaje.setIdViaje(resultado.getLong("id_viaje"));
             viaje.setNombreViaje(resultado.getString("nombre_viaje"));
             viaje.setDescripViaje(resultado.getString("descrip_viaje"));
             viaje.setFechaViaje(resultado.getDate("fecha_viaje"));
             viaje.setValorTotalViaje(resultado.getDouble("valor_total_viaje"));
             viaje.setIsGuardadoViaje(resultado.getBoolean("is_guardado_viaje"));
-            viaje.setIdUs(resultado.getInt("id_us"));
+            viaje.setEmailUs(resultado.getString("email_us"));
             listado.add(viaje);
         }
         return listado;
@@ -113,18 +114,36 @@ public class Viajes {
         conexionViaje.eliminar(sqlViaje, conexionUrl);
     }
 
-    public Viaje findAllViajeById(long idViaje) throws SQLException {
-        Viaje viaje = new Viaje();
-        String sql = "SELECT * FROM `tbviajes` WHERE `tbviajes`.`id_viaje` = "+ idViaje +";";
+    public Viaje findAllViajeById(int idViaje) throws SQLException {
+        String sql = "SELECT * FROM `tbviajes` WHERE `id_viaje` = "+ idViaje +";";
         ResultSet resultado = conexionViaje.listar(sql, conexionUrl);
+        Viaje viaje = new Viaje();
         viaje.setIdViaje(resultado.getInt("id_viaje"));
         viaje.setNombreViaje(resultado.getString("nombre_viaje"));
         viaje.setDescripViaje(resultado.getString("descrip_viaje"));
         viaje.setFechaViaje(resultado.getDate("fecha_viaje"));
         viaje.setValorTotalViaje(resultado.getDouble("valor_total_viaje"));
         viaje.setIsGuardadoViaje(resultado.getBoolean("is_guardado_viaje"));
-        viaje.setIdUs(resultado.getInt("id_us"));
+        viaje.setEmailUs(resultado.getString("email_us"));
 
         return viaje;
+    }
+
+
+    public void saveViajeConDestino(Viaje viaje, Destino destino) throws ParseException {
+        //saveViaje(viaje);
+        //Destinos destinos = new Destinos();
+        //destinos.saveDestinoParaElUltimoViaje(destino);
+        System.out.println("llega");
+    }
+
+    public void viajeConDestinos(int id) throws SQLException {
+        Destinos destinos = new Destinos();
+        Viaje viaje1 = findAllViajeById(id);
+        System.out.println("VIAJE: nom: "+ viaje1.getNombreViaje() + " - desc: " + viaje1.getDescripViaje());
+        List<Destino> listDestinos = destinos.destinosDeUnViaje(id);
+        for (Destino destino: listDestinos) {
+            System.out.println("DESTINO: prov: " + destino.getProvinciaDest() + " - ciud:" + destino.getCiudadDest() + " - desc: " + destino.getDescripDest());
+        }
     }
 }

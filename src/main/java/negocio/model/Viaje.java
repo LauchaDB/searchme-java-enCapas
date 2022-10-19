@@ -1,13 +1,16 @@
 package negocio.model;
 
+import negocio.Destinos;
 import negocio.Viajes;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 
 public class Viaje {
 
     Viajes viajes = new Viajes();
+    Destinos destinos = new Destinos();
 
     private long idViaje;
 
@@ -21,13 +24,32 @@ public class Viaje {
 
     private boolean isGuardadoViaje;
 
-    private int idUs;
+    private String emailUs;
 
     public Viaje() {
     }
 
     public Viaje(int idViaje) throws SQLException {
-        viajes.findAllViajeById(idViaje);
+        Viaje viaje = new Viaje();
+        List<Viaje> listViajes= viajes.findAllViajes();
+        for (Viaje viajeDB: listViajes) {
+            if(viajeDB.getIdViaje() == idViaje){
+                viaje.setIdViaje(viajeDB.getIdViaje());
+                viaje.setNombreViaje(viajeDB.getNombreViaje());
+                viaje.setDescripViaje(viajeDB.getDescripViaje());
+                viaje.setFechaViaje(viajeDB.getFechaViaje());
+                viaje.setValorTotalViaje(viajeDB.getValorTotalViaje());
+                viaje.setIsGuardadoViaje(viajeDB.getIsGuardadoViaje());
+                viaje.setEmailUs(viajeDB.getEmailUs());
+            }
+        }
+        System.out.println("VIAJE: " + viaje.getNombreViaje());
+        //de aca para abajo anda
+        Destinos destinos = new Destinos();
+        List<Destino> listaDestinos = destinos.destinosDeUnViaje(idViaje);
+        for (Destino destino: listaDestinos) {
+            System.out.println("DESTINO "+ destino.getIdDest()+ ": "+ destino.getProvinciaDest() + ". ");
+        }
     }
 
     public Date getFechaViaje() {
@@ -46,14 +68,13 @@ public class Viaje {
         this.valorTotalViaje = valorTotal_viaje;
     }
 
-    public int getIdUs() {
-        return idUs;
+    public String getEmailUs() {
+        return emailUs;
     }
 
-    public void setIdUs(int idUs) {
-        this.idUs = idUs;
+    public void setEmailUs(String emailUs) {
+        this.emailUs = emailUs;
     }
-
 
     public long getIdViaje() {
         return idViaje;

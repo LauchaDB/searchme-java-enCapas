@@ -1,6 +1,7 @@
 package com.viajesEnCapas.controller;
 
 import negocio.Viajes;
+import negocio.model.Destino;
 import negocio.model.Viaje;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -37,10 +38,17 @@ public class ViajeController {
         System.out.println("nombre: " +viaje.getNombreViaje() + ", descrip: " + viaje.getDescripViaje() + ", fecha: " + viaje.getFechaViaje() + ", valor: " + viaje.getValorTotalViaje());
 
         try {
-            viajes.saveViaje(viaje, email_us);
+            viajes.saveViaje(viaje);
         } catch (ParseException e) {
             System.out.println(e);
         }
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/createViajeConDestino")
+    public void createViajeConDestino(@RequestBody List<Object> cuerpoPeticion) throws ParseException {
+        System.out.println("pasa gonorrea");
+        viajes.saveViajeConDestino((Viaje) cuerpoPeticion.get(0), (Destino) cuerpoPeticion.get(1));
     }
 
     @PutMapping("/actualizar/{id}")
@@ -59,5 +67,10 @@ public class ViajeController {
     @DeleteMapping("/eliminar/{id}")
     public void delete(@PathVariable int id){
         viajes.deleteViaje(id);
+    }
+
+    @GetMapping("/probarConstructor")
+    public void probarConstructorViajeYDestinos() throws SQLException {
+        Viaje viaje = new Viaje(1);
     }
 }
