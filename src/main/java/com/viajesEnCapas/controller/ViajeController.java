@@ -1,5 +1,6 @@
 package com.viajesEnCapas.controller;
 
+import negocio.Destinos;
 import negocio.Viajes;
 import negocio.model.Destino;
 import negocio.model.Viaje;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
@@ -45,10 +47,30 @@ public class ViajeController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/createViajeConDestino")
-    public void createViajeConDestino(@RequestBody List<Object> cuerpoPeticion) throws ParseException {
-        System.out.println("pasa gonorrea");
-        viajes.saveViajeConDestino((Viaje) cuerpoPeticion.get(0), (Destino) cuerpoPeticion.get(1));
+    @PostMapping("/createViajeConDestino/{nombreViaje}/{descripcionViaje}/{fechaViaje}/{valorViaje}/{emailUs}")
+    public void createViajeConDestino(@PathVariable String nombreViaje, @PathVariable String descripcionViaje, @PathVariable String fechaViaje, @PathVariable double valorViaje, @PathVariable String emailUs, @RequestBody List<Destino> cuerpoPeticion) throws ParseException {
+
+        Viaje viaje = new Viaje();
+        Destino destino1 = new Destino();
+        Destino destino2 = new Destino();
+        Destinos destinos = new Destinos();
+        try{
+            //creando viaje
+            viaje.setNombreViaje(nombreViaje);
+            viaje.setDescripViaje(descripcionViaje);
+            viaje.setFechaViaje(new Date(2022-10-12));
+            viaje.setValorTotalViaje(valorViaje);
+            viaje.setIsGuardadoViaje(false);
+            viaje.setEmailUs(emailUs);
+            viajes.saveViaje(viaje);
+            for (Destino destinoDeLaPeticion: cuerpoPeticion) {
+                destinos.saveDestinoParaElUltimoViaje(destinoDeLaPeticion);
+            }
+        }catch(Exception e){
+            System.out.println("no se puede perro");
+            System.out.println(e);
+        }
+
     }
 
     @PutMapping("/actualizar/{id}")
@@ -71,6 +93,10 @@ public class ViajeController {
 
     @GetMapping("/probarConstructor")
     public void probarConstructorViajeYDestinos() throws SQLException {
-        Viaje viaje = new Viaje(1);
+        try{
+            Viaje viaje = new Viaje(1);
+        }catch(Exception e){
+            System.out.println("No existe viaje con ese id");
+        }
     }
 }

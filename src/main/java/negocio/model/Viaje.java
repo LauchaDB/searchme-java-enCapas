@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
-public class Viaje {
+public class Viaje{
 
     Viajes viajes = new Viajes();
     Destinos destinos = new Destinos();

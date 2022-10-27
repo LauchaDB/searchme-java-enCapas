@@ -130,10 +130,10 @@ public class Viajes {
     }
 
 
-    public void saveViajeConDestino(Viaje viaje, Destino destino) throws ParseException {
-        //saveViaje(viaje);
-        //Destinos destinos = new Destinos();
-        //destinos.saveDestinoParaElUltimoViaje(destino);
+    public void saveViajeConDestino(Object viaje, Object destino) throws ParseException {
+        Destinos destinos = new Destinos();
+        saveViaje((Viaje) viaje);
+        destinos.saveDestinoParaElUltimoViaje((Destino) destino);
         System.out.println("llega");
     }
 

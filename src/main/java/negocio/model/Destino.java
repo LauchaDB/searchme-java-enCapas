@@ -1,6 +1,6 @@
 package negocio.model;
 
-public class Destino {
+public class Destino{
 
     private long idDest;
 
