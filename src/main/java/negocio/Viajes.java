@@ -23,6 +23,11 @@ public class Viajes {
 
     Conexion conexionViaje = new Conexion();
 
+    public void saveViajeTodoEnBlanco(){
+        String sql = "INSERT INTO `tbviajes` (`id_viaje`, `nombre_viaje`, `descrip_viaje`, `fecha_viaje`, `valor_total_viaje`, `is_guardado_viaje`,`email_us`) VALUES (NULL, '', '', NULL, 0, 0, '');";
+        conexionViaje.agregar(sql, conexionUrl);
+    }
+
     public void saveViaje(Viaje viaje) throws ParseException {
 
         String sql = "INSERT INTO `tbviajes` (`id_viaje`, `nombre_viaje`, `descrip_viaje`, `fecha_viaje`, `valor_total_viaje`, `is_guardado_viaje`,`email_us`) VALUES (NULL, '"

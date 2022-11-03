@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -54,11 +55,15 @@ public class ViajeController {
         Destino destino1 = new Destino();
         Destino destino2 = new Destino();
         Destinos destinos = new Destinos();
+        List<String> fecha = Arrays.asList(fechaViaje.split("-"));
+        String año = fecha.get(0);
+        String mes = fecha.get(1);
+        String dia = fecha.get(2);
         try{
             //creando viaje
             viaje.setNombreViaje(nombreViaje);
             viaje.setDescripViaje(descripcionViaje);
-            viaje.setFechaViaje(new Date(2022-10-12));
+            viaje.setFechaViaje(new Date(Integer.parseInt(año)-1900, Integer.parseInt(mes)-1, Integer.parseInt(dia)));
             viaje.setValorTotalViaje(valorViaje);
             viaje.setIsGuardadoViaje(false);
             viaje.setEmailUs(emailUs);
